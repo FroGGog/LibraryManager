@@ -9,10 +9,12 @@ Can add/edit/remove/find/see all books from "library".
 Admin will moderate library.
 
 ## User
-No fiches...not long  
-Will be able to search for books, get info about them  
-Also will be able to log in and get his saved favorite books list  
+Added (v.1.0.1) 
+* show books list
+* find book by id
+* find book by author
+* find book by title
 
 ### Info
-Version : 1.0.0  
+Version : 1.0.1  UPD from 1.0.0
 Creator : Danya Bucenin
