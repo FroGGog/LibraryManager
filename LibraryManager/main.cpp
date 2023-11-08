@@ -151,6 +151,20 @@ public:
 		iterator->printInfo();
 	}
 
+	void f_bookByAuthor(std::string& author) {
+		unsigned count{};
+		for (auto iterator{ allBooks.begin() }; iterator < allBooks.end(); iterator++) {
+			if (iterator->author == author) {
+				count++;
+				std::cout << iterator->getId() << ".  " << iterator->title << " : " << iterator->author << '\n';
+			}
+		}
+		std::cout << "\n\n";
+		if (count == 0) {
+			std::cout << "No such author in library. \n";
+		}
+	}
+
 	void printBooksList() {
 		
 		std::cout << "Here are list of all library books: \n";
@@ -200,6 +214,15 @@ public:
 			}
 			return;
 		}
+		else if (action == "f_author") {
+			std::cout << "Write book author : ";
+			std::string tempAuthor{};
+			std::cin >> tempAuthor;
+			f_bookByAuthor(tempAuthor);
+		}
+		else if (action == "exit") {
+			return;
+		}
 	}
 
 private:
@@ -208,23 +231,50 @@ private:
 
 class User {
 
+public:
+
+	Library userLibrary;
+
+	User(Library& mainLibrary) {
+		userLibrary = mainLibrary;
+	}
 	// add user saved list, saved users in file with some info about tham, exmpl userFavoriteBooks{index, index, index}
 	//but if some books was deleted you must update user favorite indexes
 
-	enum class userOptions{FindById = 1, FindByAuthor, FindByTitle, ShowFavoriteList, ChangeFavoriteList, AddNewBookToLibrary};
+	//enum class userOptions : short {FindById = 1, FindByAuthor, FindByTitle, ShowFavoriteList, ChangeFavoriteList, AddNewBookToLibrary};
 
 	void printMainMenu() {
-
+		std::cout << "Here is user options menu. You can do this with your persmission:\n[1] Print all library books\n";
+		std::cout << "[2] Find book by id\n[3] Find book by author\n[4] Find book by title\n[5] Show your favorite books\n[6] Edit favorite books list\n";
+		std::cout << "[7] Suggest new library book to add\n[8] Exit\n";
 	}
 
-
-	void mainMenu() {
-		system("cls");
-		std::cout << "It's library, there you can search for added books, or or offer to add your own\n";
+	std::string userChoice(bool& inUserPanel) {
+		unsigned userChoice;
+		std::cout << "Enter number from 1 to 8 : ";
+		std::cin >> userChoice;
+		std::cout << '\n';
+		switch (userChoice)
+		{
+		case 1:
+			system("cls");
+			return "booklist";
+		case 2:
+			system("cls");
+			return "f_id";
+		case 3:
+			system("cls");
+			return "f_author";
+		case 8:
+			inUserPanel = false;
+			return "exit";
+		default:
+			break;
+		}
 
 	}
-
-
+private:
+	std::vector<Book> favoriteBooks{};
 };
 
 
@@ -283,19 +333,22 @@ int main() {
 
 	bool admin{ false };
 	bool inAdminPanel{ false };
+	bool inUserPanel{ true };
 
-	Book testBook{"All quiet on the Western front", "A novel by Erich Maria Remarque", "Erich Maria Remarque", 5};
-	Book testBook2{ "Return", "A novel by Erich Maria Remarque 2", "Erich Maria Remarque" };
+	Book testBook{"All quiet on the Western front", "A novel by Erich Maria Remarque", "Erich Maria Remarque", 10};
+	Book testBook2{ "Return", "A novel by Erich Maria Remarque 2", "Erich Maria Remarque", 8 };
+	Book testBook3{ "Aboba", "love", "Danek" };
 
 	Library mainLibrary{};
 
-	User mainUser{};
+	User mainUser{mainLibrary};
 
 	mainLibrary.addBook(testBook);
 	mainLibrary.addBook(testBook2);
+	mainLibrary.addBook(testBook3);
 
  	//admin = adminAccess();
-	admin = true;
+	admin = false;
 	if (admin) {
 		inAdminPanel = true;
 		while (inAdminPanel) {
@@ -304,7 +357,13 @@ int main() {
 
 			mainLibrary.libraryManager(adminAction);
 		}
-		
+	}
+	while (inUserPanel) {
+		unsigned userNum{};
+		std::string userAction{};
+		mainUser.printMainMenu();
+		userAction = mainUser.userChoice(inUserPanel);
+		mainLibrary.libraryManager(userAction);
 	}
 
 
