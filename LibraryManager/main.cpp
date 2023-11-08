@@ -151,17 +151,17 @@ public:
 		iterator->printInfo();
 	}
 
-	void f_bookByAuthor(std::string& author) {
+	void f_bookByAuthorTitle(std::string& author, std::string& title) {
 		unsigned count{};
 		for (auto iterator{ allBooks.begin() }; iterator < allBooks.end(); iterator++) {
-			if (iterator->author == author) {
+			if (iterator->author == author || iterator->title == title) {
 				count++;
 				std::cout << iterator->getId() << ".  " << iterator->title << " : " << iterator->author << '\n';
 			}
 		}
 		std::cout << "\n\n";
 		if (count == 0) {
-			std::cout << "No such author in library. \n";
+			std::cout << "No such book in library. \n";
 		}
 	}
 
@@ -215,10 +215,18 @@ public:
 			return;
 		}
 		else if (action == "f_author") {
-			std::cout << "Write book author : ";
+			std::cout << "Write books author : ";
 			std::string tempAuthor{};
+			std::string tempTitle{ " " };
 			std::cin >> tempAuthor;
-			f_bookByAuthor(tempAuthor);
+			f_bookByAuthorTitle(tempAuthor, tempTitle);
+		}
+		else if (action == "f_title") {
+			std::cout << "Write books title : ";
+			std::string tempAuthor{ " " };
+			std::string tempTitle{};
+			std::cin >> tempTitle;
+			f_bookByAuthorTitle(tempAuthor, tempTitle);
 		}
 		else if (action == "exit") {
 			return;
@@ -265,6 +273,9 @@ public:
 		case 3:
 			system("cls");
 			return "f_author";
+		case 4:
+			system("cls");
+			return "f_title";
 		case 8:
 			inUserPanel = false;
 			return "exit";
