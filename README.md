@@ -14,5 +14,5 @@ Will be able to search for books, get info about them
 Also will be able to log in and get his saved favorite books list  
 
 ### Info
-Version : 1.0.0
+Version : 1.0.0  
 Creator : Danya Bucenin
