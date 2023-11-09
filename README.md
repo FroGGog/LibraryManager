@@ -9,6 +9,12 @@ Can add/edit/remove/find/see all books from "library".
 Admin will moderate library.
 
 ## User
+Added (v.1.0.2)  
+* add book to user favorites list
+* remove book from user favorites list
+* few bug fixes
+
+
 Added (v.1.0.1) 
 * show books list
 * find book by id
@@ -16,5 +22,5 @@ Added (v.1.0.1)
 * find book by title
 
 ### Info
-Version : 1.0.1  UPD from 1.0.0
+Version : 1.0.2
 Creator : Danya Bucenin
