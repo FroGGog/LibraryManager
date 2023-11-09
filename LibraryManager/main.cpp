@@ -1,6 +1,7 @@
 ﻿#include <iostream>
 #include <string>
 #include <vector>
+#include <algorithm>
 
 
 //main book class
@@ -43,6 +44,13 @@ public:
 	unsigned getId() {
 		return id;
 	}
+
+	bool operator ==(const Book& other) {
+		if (this->title == other.title && this->author == other.author) {			
+			return true;
+		}
+	}
+
 	void printInfo() {
 
 		auto lambdaFunc = [](short& rating) {
@@ -65,6 +73,11 @@ class Library {
 public:
 	//vector for all books
 	std::vector<Book> allBooks{};
+
+	Book add_fList(unsigned& id) {
+		return allBooks[id-1];
+	}
+
 
 	void addBook() {
 		std::string tempAuthor{};
@@ -241,13 +254,75 @@ class User {
 
 public:
 
-	Library userLibrary;
+	Library* c_mainLibrary{};
 
 	User(Library& mainLibrary) {
-		userLibrary = mainLibrary;
+		c_mainLibrary = &mainLibrary;
 	}
+
+	~User() {
+		c_mainLibrary = nullptr;
+	}
+
 	// add user saved list, saved users in file with some info about tham, exmpl userFavoriteBooks{index, index, index}
 	//but if some books was deleted you must update user favorite indexes
+
+	void printUserF_List() {
+		if (std::size(favoriteBooks) == 0) {
+			std::cout << "Your favorites list is empty!\n\n";
+			return;
+		}
+		for (auto book : favoriteBooks) {
+			book.printInfo();
+		}
+	}
+
+	bool checkBookInFav(Book mainBook) {
+		for (auto book : favoriteBooks) {
+			if (mainBook == book) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	void f_BookListManager() {
+		short userChoice{};
+		unsigned id{};
+		std::cout << "Your favorites list menu.\n[1]Add book by id\n[2]Remove book by id\n[3]Print info about book from your list\n";
+		std::cin >> userChoice;
+		switch (userChoice) {
+			case 1:
+				system("cls");
+				std::cout << "Write books index to add : ";
+				if (c_mainLibrary->getAndCheckValidId(id)) {
+					if (checkBookInFav(c_mainLibrary->add_fList(id))) {
+						std::cout << "Book already in list!\n";
+						return;
+					}
+					else {
+						std::cout << "Book added \n";
+						favoriteBooks.push_back(c_mainLibrary->add_fList(id));
+						return;
+					}
+					
+				}
+				else {
+					return;
+				}
+			case 2:
+				system("cls");
+				std::cout << "Write books index to remove : ";
+				if (c_mainLibrary->getAndCheckValidId(id)) {
+					auto iterator = favoriteBooks.begin() + id - 1;
+					favoriteBooks.erase(iterator);
+					std::cout << "Book deleted!\n";
+					return;
+				}
+			
+		}
+		return;
+	}
 
 	//enum class userOptions : short {FindById = 1, FindByAuthor, FindByTitle, ShowFavoriteList, ChangeFavoriteList, AddNewBookToLibrary};
 
@@ -258,11 +333,12 @@ public:
 	}
 
 	std::string userChoice(bool& inUserPanel) {
-		unsigned userChoice;
+		unsigned userNum{};
 		std::cout << "Enter number from 1 to 8 : ";
-		std::cin >> userChoice;
+		std::cin >> userNum;
+
 		std::cout << '\n';
-		switch (userChoice)
+		switch (userNum)
 		{
 		case 1:
 			system("cls");
@@ -276,16 +352,24 @@ public:
 		case 4:
 			system("cls");
 			return "f_title";
+		case 5:
+			system("cls");
+			printUserF_List();
+			return "None";
+		case 6:
+			system("cls");
+			f_BookListManager();
+			return "None";
 		case 8:
 			inUserPanel = false;
 			return "exit";
 		default:
-			break;
+			break;			
 		}
-
 	}
 private:
 	std::vector<Book> favoriteBooks{};
+	//unsigned vectorSize = std::size(favoriteBooks);
 };
 
 
