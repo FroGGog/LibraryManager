@@ -3,6 +3,16 @@
 #include <vector>
 #include <algorithm>
 
+/*
+TODO
+1. Fix bugs with user inputs everywhere
+2. Add remaining user functions
+3. Create data base for saving users information
+
+*/
+
+
+
 
 //main book class
 class Book {
@@ -45,6 +55,7 @@ public:
 		return id;
 	}
 
+	//== operator for cheking if one book is equal to another by title and author
 	bool operator ==(const Book& other) {
 		if (this->title == other.title && this->author == other.author) {			
 			return true;
@@ -74,6 +85,7 @@ public:
 	//vector for all books
 	std::vector<Book> allBooks{};
 
+	//returns book from library vector wich must be added to user f_list
 	Book add_fList(unsigned& id) {
 		return allBooks[id-1];
 	}
@@ -159,11 +171,13 @@ public:
 		
 	}
 
+	//searcing book by given id
 	void f_bookById(unsigned& id) {
 		auto iterator = allBooks.begin() + id - 1;
 		iterator->printInfo();
 	}
 
+	//seactring book by given title
 	void f_bookByAuthorTitle(std::string& author, std::string& title) {
 		unsigned count{};
 		for (auto iterator{ allBooks.begin() }; iterator < allBooks.end(); iterator++) {
@@ -178,6 +192,7 @@ public:
 		}
 	}
 
+	//prints all books from library
 	void printBooksList() {
 		
 		std::cout << "Here are list of all library books: \n";
@@ -187,6 +202,7 @@ public:
 		std::cout << "\n\n";
 	}
 
+	//checks if user used valid id for some inputs
 	bool getAndCheckValidId(unsigned& id) {
 		std::cin >> id;
 		if (id > library_size) {
@@ -196,6 +212,7 @@ public:
 		return true;
 	}
 
+	//main library manager function that controll what programm should do
 	void libraryManager(std::string& action) {
 		if (action == "add") {
 			addBook();
@@ -219,6 +236,7 @@ public:
 			}
 			return;
 		}
+		//find by id
 		else if (action == "f_id") {
 			std::cout << "Write book index to print info : ";
 			unsigned id{};
@@ -227,6 +245,7 @@ public:
 			}
 			return;
 		}
+		//find by author
 		else if (action == "f_author") {
 			std::cout << "Write books author : ";
 			std::string tempAuthor{};
@@ -234,6 +253,7 @@ public:
 			std::cin >> tempAuthor;
 			f_bookByAuthorTitle(tempAuthor, tempTitle);
 		}
+		//find by title
 		else if (action == "f_title") {
 			std::cout << "Write books title : ";
 			std::string tempAuthor{ " " };
@@ -254,8 +274,9 @@ class User {
 
 public:
 
-	Library* c_mainLibrary{};
+	Library* c_mainLibrary{nullptr};
 
+	//constructor that creates pointer to main books library
 	User(Library& mainLibrary) {
 		c_mainLibrary = &mainLibrary;
 	}
@@ -277,6 +298,7 @@ public:
 		}
 	}
 
+	//checks if book is already in favorites list
 	bool checkBookInFav(Book mainBook) {
 		for (auto book : favoriteBooks) {
 			if (mainBook == book) {
@@ -286,6 +308,7 @@ public:
 		return false;
 	}
 
+	//main function that manages actions with books favorites list
 	void f_BookListManager() {
 		short userChoice{};
 		unsigned id{};
@@ -313,6 +336,7 @@ public:
 			case 2:
 				system("cls");
 				std::cout << "Write books index to remove : ";
+				//change this, it must check if id valid for f_BooksList
 				if (c_mainLibrary->getAndCheckValidId(id)) {
 					auto iterator = favoriteBooks.begin() + id - 1;
 					favoriteBooks.erase(iterator);
