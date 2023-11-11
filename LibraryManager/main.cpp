@@ -371,7 +371,15 @@ public:
 		return;
 	}
 
-	//enum class userOptions : short {FindById = 1, FindByAuthor, FindByTitle, ShowFavoriteList, ChangeFavoriteList, AddNewBookToLibrary};
+	bool checkUserIsDigit(std::string& userNum) {
+		for (unsigned i{}; i < userNum.length(); i++) {
+			if (!isdigit(userNum[i])) {
+				return false;
+			}
+		}
+		return true;
+
+	}
 
 	void printMainMenu() {
 		std::cout << "Here is user options menu. You can do this with your persmission:\n[1] Print all library books\n";
@@ -380,12 +388,15 @@ public:
 	}
 
 	std::string userChoice(bool& inUserPanel) {
-		unsigned userNum{};
+		std::string userNum{};
 		std::cout << "Enter number from 1 to 8 : ";
 		std::cin >> userNum;
+		if (!checkUserIsDigit(userNum)) {
+			return "None";
+		}
 
 		std::cout << '\n';
-		switch (userNum)
+		switch (int userNum2 = std::stoi(userNum))
 		{
 		case 1:
 			system("cls");
