@@ -396,6 +396,7 @@ public:
 		}
 
 		std::cout << '\n';
+		//converts string into int
 		switch (int userNum2 = std::stoi(userNum))
 		{
 		case 1:

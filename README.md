@@ -9,6 +9,11 @@ Can add/edit/remove/find/see all books from "library".
 Admin will moderate library.
 
 ## User
+Added (v.1.0.3)
+* Now user can print book from his favorites list
+* fixed bugs with user's main menu input
+* fixed bugs with books indexes in favorites list
+
 Added (v.1.0.2)  
 * add book to user favorites list
 * remove book from user favorites list
@@ -22,5 +27,5 @@ Added (v.1.0.1)
 * find book by title
 
 ### Info
-Version : 1.0.2
+Version : 1.0.3
 Creator : Danya Bucenin
