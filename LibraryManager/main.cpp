@@ -6,7 +6,6 @@
 /*
 TODO
 1. Fix bugs with user inputs everywhere
-2. Add remaining user functions
 3. Create data base for saving users information
 
 */
@@ -38,7 +37,7 @@ public:
 	void setDescr(std::string& descr) {
 		this->shortDescr = descr;
 	}
-	void setId(unsigned& id) {
+	void setId(size_t& id) {
 		this->id = id;
 	}
 	void setRating(short& rating) {
@@ -51,7 +50,7 @@ public:
 	short getRating() {
 		return rating;
 	}
-	unsigned getId() {
+	size_t getId() {
 		return id;
 	}
 
@@ -59,6 +58,9 @@ public:
 	bool operator ==(const Book& other) {
 		if (this->title == other.title && this->author == other.author) {			
 			return true;
+		}
+		else {
+			return false;
 		}
 	}
 
@@ -75,7 +77,7 @@ public:
 	}
 
 private:
-	unsigned id{};
+	size_t id{};
 	short rating{};
 };
 
@@ -135,7 +137,7 @@ public:
 	//function to update books indexes when any book removed
 	void updateIndex(unsigned removedBookId) {
 		for (auto& book : allBooks) {
-			unsigned tempId = book.getId();
+			size_t tempId = book.getId();
 			if (tempId > removedBookId) {
 				tempId--;
 				book.setId(tempId);
@@ -203,9 +205,9 @@ public:
 	}
 
 	//checks if user used valid id for some inputs
-	bool getAndCheckValidId(unsigned& id) {
+	bool getAndCheckValidId(unsigned& id, size_t lib_size) {
 		std::cin >> id;
-		if (id > library_size) {
+		if (id > lib_size) {
 			std::cout << "Index out of range\n";
 			return false;
 		}
@@ -223,7 +225,7 @@ public:
 		else if (action == "remove") {
 			std::cout << "Write book index to remove : ";
 			unsigned id{};
-			if (getAndCheckValidId(id)) {
+			if (getAndCheckValidId(id, library_size)) {
 				removeBook(id);
 			}
 			return;
@@ -231,7 +233,7 @@ public:
 		else if (action == "edit") {
 			std::cout << "Write book index to edit : ";
 			unsigned id{};
-			if (getAndCheckValidId(id)) {
+			if (getAndCheckValidId(id, library_size)) {
 				editBook(id);
 			}
 			return;
@@ -240,7 +242,7 @@ public:
 		else if (action == "f_id") {
 			std::cout << "Write book index to print info : ";
 			unsigned id{};
-			if (getAndCheckValidId(id)) {
+			if (getAndCheckValidId(id, library_size)) {
 				f_bookById(id);
 			}
 			return;
@@ -267,7 +269,7 @@ public:
 	}
 
 private:
-	unsigned library_size = allBooks.size();
+	size_t library_size = allBooks.size();
 };
 
 class User {
@@ -294,7 +296,7 @@ public:
 			return;
 		}
 		for (auto book : favoriteBooks) {
-			book.printInfo();
+			std::cout << book.getId() << ". " << book.title << "\n";
 		}
 	}
 
@@ -308,8 +310,17 @@ public:
 		return false;
 	}
 
+	void f_listIndexUpdate(unsigned& index) {
+		size_t tempId{};
+		for (auto iterator{ favoriteBooks.begin() + index }; iterator < favoriteBooks.end(); iterator++) {
+			tempId = iterator->getId() - 1;
+			iterator->setId(tempId);
+		}
+	}
+
 	//main function that manages actions with books favorites list
 	void f_BookListManager() {
+		f_size = favoriteBooks.size();
 		short userChoice{};
 		unsigned id{};
 		std::cout << "Your favorites list menu.\n[1]Add book by id\n[2]Remove book by id\n[3]Print info about book from your list\n";
@@ -318,14 +329,17 @@ public:
 			case 1:
 				system("cls");
 				std::cout << "Write books index to add : ";
-				if (c_mainLibrary->getAndCheckValidId(id)) {
+				if (c_mainLibrary->getAndCheckValidId(id, c_mainLibrary->allBooks.size())) {
 					if (checkBookInFav(c_mainLibrary->add_fList(id))) {
 						std::cout << "Book already in list!\n";
 						return;
 					}
 					else {
 						std::cout << "Book added \n";
-						favoriteBooks.push_back(c_mainLibrary->add_fList(id));
+						Book tempBook = c_mainLibrary->add_fList(id);
+						size_t newIndex = f_size + 1;
+						tempBook.setId(newIndex);
+						favoriteBooks.push_back(tempBook);
 						return;
 					}
 					
@@ -337,10 +351,19 @@ public:
 				system("cls");
 				std::cout << "Write books index to remove : ";
 				//change this, it must check if id valid for f_BooksList
-				if (c_mainLibrary->getAndCheckValidId(id)) {
+				if (c_mainLibrary->getAndCheckValidId(id, c_mainLibrary->allBooks.size())) {
+					f_listIndexUpdate(id);
 					auto iterator = favoriteBooks.begin() + id - 1;
 					favoriteBooks.erase(iterator);
 					std::cout << "Book deleted!\n";
+					return;
+				}
+			case 3:
+				system("cls");
+				std::cout << "Write books index to show info about";
+				if (c_mainLibrary->getAndCheckValidId(id, c_mainLibrary->allBooks.size())) {
+					auto iterator = favoriteBooks.begin() + id - 1;
+					iterator->printInfo();
 					return;
 				}
 			
@@ -390,10 +413,11 @@ public:
 		default:
 			break;			
 		}
+		return "None";
 	}
 private:
 	std::vector<Book> favoriteBooks{};
-	//unsigned vectorSize = std::size(favoriteBooks);
+	size_t f_size = favoriteBooks.size();
 };
 
 
