@@ -20,10 +20,13 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Classes\BookClass.cpp" />
+    <ClCompile Include="src\Classes\LibraryClass.cpp" />
     <ClCompile Include="src\main.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\BookClass.h" />
+    <ClInclude Include="src\Classes\BookClass.h" />
+    <ClInclude Include="src\Classes\LibraryClass.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>17.0</VCProjectVersion>

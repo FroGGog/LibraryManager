@@ -27,5 +27,4 @@ private:
 	size_t id;
 	short rating;
 
-
 };
