@@ -4,6 +4,12 @@ Using only STL. Trying to improve my C++ skils.
 
 Here some functionalties  
 
+UPD (v.1.0.4):  
+* Separated Library class from main.cpp  
+* Separated User class from main.cpp  
+* Separated Book class from main.cpp  
+
+
 ## Admin:
 Can add/edit/remove/find/see all books from "library".
 Admin will moderate library.
