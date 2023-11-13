@@ -2,84 +2,19 @@
 #include <string>
 #include <vector>
 #include <algorithm>
+#include "Classes/BookClass.h"
+
 
 /*
 TODO
-1. Fix bugs with user inputs everywhere
-3. Create data base for saving users information
+1. Create data base for saving users information
 
 */
 
 
 
 
-//main book class
-class Book {
 
-public:
-	std::string title{};
-	std::string shortDescr{};
-	std::string author{};
-	//constructor
-	Book(std::string title, std::string shortDescr = "None", std::string author = "None", short rating = 1) {
-		this->title = title;
-		this->shortDescr = shortDescr;
-		this->author = author;
-		this->rating = rating;
-	}
-
-	void setTitle(std::string& title) {
-		this->title = title;
-	}
-	void setAuthor(std::string& author) {
-		this->author = author;
-	}
-	void setDescr(std::string& descr) {
-		this->shortDescr = descr;
-	}
-	void setId(size_t& id) {
-		this->id = id;
-	}
-	void setRating(short& rating) {
-		if (rating > 10 || rating < 1) {
-			std::cout << "Invalid value (must be from 1 to 10)\n";
-			return;
-		}
-		this->rating = rating;
-	}
-	short getRating() {
-		return rating;
-	}
-	size_t getId() {
-		return id;
-	}
-
-	//== operator for cheking if one book is equal to another by title and author
-	bool operator ==(const Book& other) {
-		if (this->title == other.title && this->author == other.author) {			
-			return true;
-		}
-		else {
-			return false;
-		}
-	}
-
-	void printInfo() {
-
-		auto lambdaFunc = [](short& rating) {
-			for (short stars{ 0 }; stars < rating; stars++) {
-				std::wcout <<  "* ";
-			}
-			std::cout << "\n\n";
-		};
-		std::cout << "\nBook : \'" + this->title + "\'.\nAuthor : " + this->author + "\nShort description : " + this->shortDescr + "\nRating : "; 
-		lambdaFunc(rating);
-	}
-
-private:
-	size_t id{};
-	short rating{};
-};
 
 class Library {
 
@@ -89,7 +24,7 @@ public:
 
 	//returns book from library vector wich must be added to user f_list
 	Book add_fList(unsigned& id) {
-		return allBooks[id-1];
+		return allBooks[ id-1 ];
 	}
 
 
@@ -198,7 +133,7 @@ public:
 	void printBooksList() {
 		
 		std::cout << "Here are list of all library books: \n";
-		for (auto book : allBooks) {
+		for (auto& book : allBooks) {
 			std::cout << book.getId() << ". " + book.title+'\n';
 		}
 		std::cout << "\n\n";
@@ -295,14 +230,14 @@ public:
 			std::cout << "Your favorites list is empty!\n\n";
 			return;
 		}
-		for (auto book : favoriteBooks) {
+		for (auto& book : favoriteBooks) {
 			std::cout << book.getId() << ". " << book.title << "\n";
 		}
 	}
 
 	//checks if book is already in favorites list
 	bool checkBookInFav(Book mainBook) {
-		for (auto book : favoriteBooks) {
+		for (auto& book : favoriteBooks) {
 			if (mainBook == book) {
 				return true;
 			}
