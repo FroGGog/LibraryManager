@@ -21,6 +21,6 @@ public:
 	void libraryManager(std::string&);
 
 private:
-	size_t library_size;
+	size_t library_size{0};
 
 };

@@ -21,5 +21,8 @@ private:
 	std::vector<Book> favoriteBooks{};
 	size_t f_size = favoriteBooks.size();
 
+	std::string userName{};
+	std::string password{};
+
 
 };

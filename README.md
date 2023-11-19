@@ -4,10 +4,19 @@ Using only STL. Trying to improve my C++ skils.
 
 Here some functionalties  
 
+UPD (v.1.0.5):
+* Added DataBase class
+* Added simple registration function
+* Will add normal reg functions soon
+
 UPD (v.1.0.4):  
 * Separated Library class from main.cpp  
 * Separated User class from main.cpp  
-* Separated Book class from main.cpp  
+* Separated Book class from main.cpp 
+
+
+## Data Base
+* Created simple .txt writer (v 1.0.5)
 
 
 ## Admin:
@@ -33,5 +42,5 @@ Added (v.1.0.1)
 * find book by title
 
 ### Info
-Version : 1.0.3
+Version : 1.0.5
 Creator : Danya Bucenin

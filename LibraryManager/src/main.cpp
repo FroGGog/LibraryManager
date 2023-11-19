@@ -5,27 +5,27 @@
 #include "Classes/BookClass.h"
 #include "Classes/LibraryClass.h"
 #include "Classes/UserClass.h"
+#include "UserDataBase.h"
 
 
-/*
-TODO
-1. Create data base for saving users information
-
-*/
-
-bool adminAccess() {
+std::string adminAccess() {
 	std::string username{};
 	std::string password{};
-	std::cout << "Enter your username and password(split in to lines)(or keep empty for guest enter) :\n";
-	std::cin >> username;
-	std::cin >> password;
+	std::cout << "Enter your username and password(split in two lines)(or keep empty for guest enter)\n";
+	std::cout << "*Guest users can't save their favorite lists*\n";
+	std::cout << "Or type !r to register\n";
+	std::getline(std::cin, username);
+	if (username == "!r") {
+		return "reg";
+	}
+	std::getline(std::cin, password);
 	std::cout << '\n';
 	if (username == "admin" && password == "admin") {
 		std::cout << "Access granted!\n";
-		return true;
+		return "admin";
 	}
 	else {
-		return false;
+		return "user";
 	}
 }
 
@@ -65,9 +65,8 @@ std::string adminPanel(bool& inAdminPanel) {
 
 int main() {
 
-	bool admin{ false };
 	bool inAdminPanel{ false };
-	bool inUserPanel{ true };
+	bool inUserPanel{ false };
 
 	Book testBook{"All quiet on the Western front", "A novel by Erich Maria Remarque", "Erich Maria Remarque", 10};
 	Book testBook2{ "Return", "A novel by Erich Maria Remarque 2", "Erich Maria Remarque", 8 };
@@ -75,30 +74,40 @@ int main() {
 
 	Library mainLibrary{};
 
+	DataBase mainDataBase{};
+
 	User mainUser{mainLibrary};
 
 	mainLibrary.addBook(testBook);
 	mainLibrary.addBook(testBook2);
 	mainLibrary.addBook(testBook3);
 
- 	//admin = adminAccess();
-	admin = false;
-	if (admin) {
+	std::string admin = adminAccess();
+	if (admin == "admin") {
 		inAdminPanel = true;
 		while (inAdminPanel) {
 			std::string adminAction{};
-			//adminAction = adminPanel(inAdminPanel);
+			adminAction = adminPanel(inAdminPanel);
 
 			mainLibrary.libraryManager(adminAction);
 		}
 	}
-	while (inUserPanel) {
-		unsigned userNum{};
-		std::string userAction{};
-		mainUser.printMainMenu();
-		userAction = mainUser.userChoice(inUserPanel);
-		mainLibrary.libraryManager(userAction);
+	else if(admin == "user") {
+		inUserPanel = true;
+		while (inUserPanel) {
+			unsigned userNum{};
+			std::string userAction{};
+			mainUser.printMainMenu();
+			userAction = mainUser.userChoice(inUserPanel);
+			mainLibrary.libraryManager(userAction);
+		}
 	}
+	else {
 
+		mainDataBase.regNewUser();
+		mainDataBase.SaveUserInfo();
+
+	}
+	
 	return 0;
 }
